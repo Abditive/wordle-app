@@ -57,7 +57,7 @@ const words = [
 let playerString = [];
 let singleString = "";
 let inputFields = document.getElementsByClassName("row-1");
-let winningWord = words[2];
+let winningWord = words[0];
 let wordFound = false;
 let testButton = document.getElementById("test-button");
 // this event will trigger the game to run the checking functions
@@ -73,6 +73,9 @@ testButton.addEventListener("click", function () {
       if (singleString === winningWord) {
         console.log("you win");
         wordFound = false;
+        for (let input of inputFields) {
+          input.disabled = true;
+        }
         break;
       } else {
         console.log("try again");
@@ -85,10 +88,13 @@ testButton.addEventListener("click", function () {
     sharedChars(singleString, winningWord);
   }
   console.log(singleString);
+  // resets the value of singleString and wordFound each time click event occurs.
   wordFound = false;
+
   singleString = "";
 });
 
+//  sharedChars function compares two strings and returns the position shared characters
 function sharedChars(str1, str2) {
   for (let i = 0; i < str1.length; i++) {
     if (str2.indexOf(str1[i]) !== -1) {
@@ -109,3 +115,5 @@ function sharedChars(str1, str2) {
     }
   }
 }
+
+// function to focus automatically
