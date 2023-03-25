@@ -56,44 +56,44 @@ const words = [
 ];
 let playerString = [];
 let singleString = "";
+const gameContainer = document.getElementById("game-container");
 let inputFields = document.getElementsByClassName("row-1");
 let winningWord = words[0];
 let wordFound = false;
 let testButton = document.getElementById("test-button");
 // this event will trigger the game to run the checking functions
-testButton.addEventListener("click", function () {
-  for (let input of inputFields) {
-    playerString.push(input.value);
-    singleString = singleString + input.value;
-  }
-  for (let val of words) {
-    if (val === singleString) {
-      console.log("valid word");
-      wordFound = true;
-      if (singleString === winningWord) {
-        console.log("you win");
-        wordFound = false;
-        for (let input of inputFields) {
-          input.disabled = true;
+gameContainer.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    for (let input of inputFields) {
+      playerString.push(input.value);
+      singleString = singleString + input.value;
+    }
+    for (let val of words) {
+      if (val === singleString) {
+        console.log("valid word");
+        wordFound = true;
+        if (singleString === winningWord) {
+          console.log("you win");
+          wordFound = false;
+          for (let input of inputFields) {
+            input.disabled = true;
+          }
+          break;
+        } else {
+          console.log("try again");
+          break;
         }
-        break;
-      } else {
-        console.log("try again");
-        break;
       }
     }
+    if (wordFound) {
+      sharedChars(singleString, winningWord);
+    }
+    console.log(singleString);
+    // resets the value of singleString and wordFound each time click event occurs.
+    wordFound = false;
+    singleString = "";
   }
-
-  if (wordFound) {
-    sharedChars(singleString, winningWord);
-  }
-  console.log(singleString);
-  // resets the value of singleString and wordFound each time click event occurs.
-  wordFound = false;
-
-  singleString = "";
 });
-
 //  sharedChars function compares two strings and returns the position shared characters
 function sharedChars(str1, str2) {
   for (let i = 0; i < str1.length; i++) {
@@ -116,4 +116,48 @@ function sharedChars(str1, str2) {
   }
 }
 
-// function to focus automatically
+// handles deleting characters and autofocus on next input field if a character is inputed
+for (let input of inputFields) {
+  input.addEventListener("input", function (event) {
+    if (input.value.length === 1) {
+      input.nextElementSibling.focus();
+    }
+  });
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Backspace") {
+      console.log("back");
+      input.previousElementSibling.textContent = "";
+      input.previousElementSibling.focus();
+    }
+  });
+}
+
+function checkAnswer(rowArray) {
+  for (let input of rowArray) {
+    singleString = singleString + input.value;
+  }
+  for (let val of words) {
+    if (val === singleString) {
+      console.log("valid word");
+      wordFound = true;
+      if (singleString === winningWord) {
+        console.log("you win");
+        wordFound = false;
+        for (let input of rowArray) {
+          input.disabled = true;
+        }
+        break;
+      } else {
+        console.log("try again");
+        break;
+      }
+    }
+  }
+  if (wordFound) {
+    sharedChars(singleString, winningWord);
+  }
+  console.log(singleString);
+  // resets the value of singleString and wordFound each time click event occurs.
+  wordFound = false;
+  singleString = "";
+}
