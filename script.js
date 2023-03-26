@@ -54,21 +54,43 @@ const words = [
   "zebra",
   "zesty",
 ];
-let playerString = [];
 let singleString = "";
 const gameContainer = document.getElementById("game-container");
-let inputFields = document.getElementsByClassName("row-1");
+let inputRowsAll = document.getElementsByClassName("test-input");
+let inputRow1 = document.getElementsByClassName("row-1");
+let inputRow2 = document.getElementsByClassName("row-2");
+let inputRow3 = document.getElementsByClassName("row-3");
+let inputRow4 = document.getElementsByClassName("row-4");
+let inputRow5 = document.getElementsByClassName("row-5");
+let inputRow6 = document.getElementsByClassName("row-6");
 let winningWord = words[0];
 let wordFound = false;
 let testButton = document.getElementById("test-button");
 // this event will trigger the game to run the checking functions
+let progressVar = 0;
 gameContainer.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
-    checkAnswer(inputFields);
+    if (progressVar === 0) {
+      checkAnswer(inputRow1);
+      enableRow(inputRow2);
+      inputRow2[0].focus();
+    } else if (progressVar === 1) {
+      checkAnswer(inputRow2);
+      enableRow(inputRow3);
+      inputRow3[0].focus();
+    } else if (progressVar === 2) {
+      checkAnswer(inputRow3);
+    } else if (progressVar === 3) {
+      checkAnswer(inputRow4);
+    } else if (progressVar === 4) {
+      checkAnswer(inputRow5);
+    } else if (progressVar === 5) {
+      checkAnswer(inputRow6);
+    }
   }
 });
-
-handleInputFocus(inputFields);
+``;
+handleInputFocus(inputRowsAll);
 // Function Definition
 function checkAnswer(rowArray) {
   for (let input of rowArray) {
@@ -77,16 +99,20 @@ function checkAnswer(rowArray) {
   for (let val of words) {
     if (val === singleString) {
       console.log("valid word");
+
       wordFound = true;
       if (singleString === winningWord) {
         console.log("you win");
         wordFound = false;
-        for (let input of rowArray) {
-          input.disabled = true;
-        }
+        //Disable played row
+        disableRow(rowArray);
         break;
       } else {
         console.log("try again");
+        //Disable played row
+        disableRow(rowArray);
+        progressVar += 1;
+        console.log(progressVar);
         break;
       }
     }
@@ -140,5 +166,15 @@ function handleInputFocus(rowArray) {
         }
       });
     }
+  }
+}
+function disableRow(rows) {
+  for (let input of rows) {
+    input.disabled = true;
+  }
+}
+function enableRow(rows) {
+  for (let input of rows) {
+    input.disabled = false;
   }
 }
