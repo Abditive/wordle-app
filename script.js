@@ -99,7 +99,6 @@ function checkAnswer(rowArray) {
   for (let val of words) {
     if (val === singleString) {
       console.log("valid word");
-
       wordFound = true;
       if (singleString === winningWord) {
         console.log("you win");
@@ -119,9 +118,12 @@ function checkAnswer(rowArray) {
   }
   if (wordFound) {
     sharedChars(singleString, winningWord);
+  } else {
+    console.log("this word is not on the word list");
+    testingFocus = true;
   }
   console.log(singleString);
-  // resets the value of singleString and wordFound each time click event occurs.
+  // resets the value of singleString and wordFound each time event occurs.
   wordFound = false;
   singleString = "";
 }
@@ -160,8 +162,7 @@ function handleInputFocus(rowArray) {
       });
       input.addEventListener("keydown", function (event) {
         if (event.key === "Backspace") {
-          console.log("back");
-          input.previousElementSibling.textContent = "";
+          input.value = "";
           input.previousElementSibling.focus();
         }
       });
