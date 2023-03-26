@@ -53,6 +53,7 @@ const words = [
   "yacht",
   "zebra",
   "zesty",
+  "moose",
 ];
 let singleString = "";
 const gameContainer = document.getElementById("game-container");
@@ -63,7 +64,8 @@ let inputRow3 = document.getElementsByClassName("row-3");
 let inputRow4 = document.getElementsByClassName("row-4");
 let inputRow5 = document.getElementsByClassName("row-5");
 let inputRow6 = document.getElementsByClassName("row-6");
-let winningWord = words[0];
+let winningWord = words[14];
+let testFocus = false;
 let wordFound = false;
 let testButton = document.getElementById("test-button");
 // this event will trigger the game to run the checking functions
@@ -71,33 +73,37 @@ let progressVar = 0;
 gameContainer.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     if (progressVar === 0) {
-      checkAnswer(inputRow1);
-      enableRow(inputRow2);
-      inputRow2[0].focus();
+      validateAnswer(inputRow1, inputRow2);
     } else if (progressVar === 1) {
-      checkAnswer(inputRow2);
-      enableRow(inputRow3);
-      inputRow3[0].focus();
+      validateAnswer(inputRow2, inputRow3);
     } else if (progressVar === 2) {
-      checkAnswer(inputRow3);
+      validateAnswer(inputRow3, inputRow4);
     } else if (progressVar === 3) {
-      checkAnswer(inputRow4);
+      validateAnswer(inputRow4, inputRow5);
     } else if (progressVar === 4) {
-      checkAnswer(inputRow5);
+      validateAnswer(inputRow5, inputRow6);
     } else if (progressVar === 5) {
       checkAnswer(inputRow6);
     }
   }
 });
-``;
+
 handleInputFocus(inputRowsAll);
-// Function Definition
+
+function validateAnswer(currentRow, nextRow) {
+  checkAnswer(currentRow);
+  if (testFocus) {
+    enableRow(nextRow);
+    nextRow[0].focus();
+  }
+}
 function checkAnswer(rowArray) {
   for (let input of rowArray) {
     singleString = singleString + input.value;
   }
   for (let val of words) {
     if (val === singleString) {
+      testFocus = true;
       console.log("valid word");
       wordFound = true;
       if (singleString === winningWord) {
@@ -116,34 +122,41 @@ function checkAnswer(rowArray) {
       }
     }
   }
+
   if (wordFound) {
     sharedChars(singleString, winningWord);
   } else {
     console.log("this word is not on the word list");
-    testingFocus = true;
+    testFocus = false;
   }
   console.log(singleString);
   // resets the value of singleString and wordFound each time event occurs.
   wordFound = false;
   singleString = "";
 }
-
 //  sharedChars function compares two strings and returns the position shared characters
-function sharedChars(str1, str2) {
-  for (let i = 0; i < str1.length; i++) {
-    if (str2.indexOf(str1[i]) !== -1) {
-      console.log(str1[i]);
-      if (str2.indexOf(str1[i]) === str1.indexOf(str1[i])) {
+function sharedChars(currentAnswerString, correctAnswerString) {
+  for (let i = 0; i < currentAnswerString.length; i++) {
+    if (correctAnswerString.indexOf(currentAnswerString[i]) !== -1) {
+      console.log(currentAnswerString[i]);
+      if (
+        correctAnswerString.indexOf(currentAnswerString[i]) ===
+        currentAnswerString.indexOf(currentAnswerString[i])
+      ) {
         console.log(
-          `Winning Word index is ${str2.indexOf(
-            str1[i]
-          )} and INPUT index is ${str1.indexOf(str1[i])} - same`
+          `Winning Word index is ${correctAnswerString.indexOf(
+            currentAnswerString[i]
+          )} and INPUT index is ${currentAnswerString.indexOf(
+            currentAnswerString[i]
+          )} - same`
         );
       } else {
         console.log(
-          `Winning Word index is ${str2.indexOf(
-            str1[i]
-          )} and INPUT index is ${str1.indexOf(str1[i])} - different`
+          `Winning Word index is ${correctAnswerString.indexOf(
+            currentAnswerString[i]
+          )} and INPUT index is ${currentAnswerString.indexOf(
+            currentAnswerString[i]
+          )} - different`
         );
       }
     }
@@ -151,16 +164,17 @@ function sharedChars(str1, str2) {
 }
 
 // handles deleting characters and autofocus on next input field if a character is inputed
-
 function handleInputFocus(rowArray) {
   {
     for (let input of rowArray) {
       input.addEventListener("input", function (event) {
+        // if one characters is entered, focus on next element
         if (input.value.length === 1) {
           input.nextElementSibling.focus();
         }
       });
       input.addEventListener("keydown", function (event) {
+        //deletes input value and focuses on previous when backspace is pressed
         if (event.key === "Backspace") {
           input.value = "";
           input.previousElementSibling.focus();
@@ -169,11 +183,13 @@ function handleInputFocus(rowArray) {
     }
   }
 }
+// enables row, takes row array as input
 function disableRow(rows) {
   for (let input of rows) {
     input.disabled = true;
   }
 }
+// disables row, takes row array as input
 function enableRow(rows) {
   for (let input of rows) {
     input.disabled = false;
