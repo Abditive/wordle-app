@@ -64,7 +64,7 @@ let inputRow3 = document.getElementsByClassName("row-3");
 let inputRow4 = document.getElementsByClassName("row-4");
 let inputRow5 = document.getElementsByClassName("row-5");
 let inputRow6 = document.getElementsByClassName("row-6");
-let winningWord = words[14];
+let winningWord = "moose";
 let testFocus = false;
 let wordFound = false;
 let testButton = document.getElementById("test-button");
@@ -108,6 +108,7 @@ function checkAnswer(rowArray) {
       wordFound = true;
       if (singleString === winningWord) {
         console.log("you win");
+        sharedChars(singleString, winningWord, rowArray);
         wordFound = false;
         //Disable played row
         disableRow(rowArray);
@@ -124,7 +125,7 @@ function checkAnswer(rowArray) {
   }
 
   if (wordFound) {
-    sharedChars(singleString, winningWord);
+    sharedChars(singleString, winningWord, rowArray);
   } else {
     console.log("this word is not on the word list");
     testFocus = false;
@@ -134,32 +135,33 @@ function checkAnswer(rowArray) {
   wordFound = false;
   singleString = "";
 }
-//  sharedChars function compares two strings and returns the position shared characters
-function sharedChars(currentAnswerString, correctAnswerString) {
+//  sharedChars function compares two strings and returns the position shared characters - nicked from the internet and modified to suit
+function sharedChars(currentAnswerString, correctAnswerString, activeRow) {
   for (let i = 0; i < currentAnswerString.length; i++) {
-    if (correctAnswerString.indexOf(currentAnswerString[i]) !== -1) {
-      console.log(currentAnswerString[i]);
-      if (
-        correctAnswerString.indexOf(currentAnswerString[i]) ===
-        currentAnswerString.indexOf(currentAnswerString[i])
-      ) {
+    let letter = currentAnswerString[i];
+    let correctIndex = correctAnswerString.indexOf(letter);
+    let currentIndex = currentAnswerString.indexOf(letter);
+    let secondCurrentIndex = currentAnswerString.indexOf(letter + 1);
+    if (correctIndex !== -1) {
+      console.log(letter);
+      if (correctIndex === currentIndex) {
         console.log(
-          `Winning Word index is ${correctAnswerString.indexOf(
-            currentAnswerString[i]
-          )} and INPUT index is ${currentAnswerString.indexOf(
-            currentAnswerString[i]
-          )} - same`
+          `Winning Word index is ${correctIndex} and INPUT index is ${currentIndex} - same`
         );
+        activeRow[currentIndex].style["background-color"] = "green";
+        activeRow[currentIndex].style.color = "white";
       } else {
         console.log(
-          `Winning Word index is ${correctAnswerString.indexOf(
-            currentAnswerString[i]
-          )} and INPUT index is ${currentAnswerString.indexOf(
-            currentAnswerString[i]
-          )} - different`
+          `Winning Word index is ${correctIndex} and INPUT index is ${currentIndex} - different`
         );
+        activeRow[currentIndex].style["background-color"] = "blue";
+        activeRow[currentIndex].style.color = "white";
+      }
+      if (secondCurrentIndex !== -1) {
+        console.log("second letter is " + secondCurrentIndex);
       }
     }
+    console.log("second letter is " + secondCurrentIndex);
   }
 }
 
@@ -194,4 +196,13 @@ function enableRow(rows) {
   for (let input of rows) {
     input.disabled = false;
   }
+}
+function findCharacterIndices(str, char) {
+  const indices = [];
+  let index = str.indexOf(char);
+  while (index !== -1) {
+    indices.push(index);
+    index = str.indexOf(char, index + 1);
+  }
+  return indices;
 }
