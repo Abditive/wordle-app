@@ -21,3 +21,15 @@
 .test-input:focus {
   background-color: white;
 }
+.index-match {
+  background-color: green;
+  color: white;
+}
+.letter-match {
+  background-color: blue;
+  color: white;
+}
+.normal {
+  background-color: white;
+  color: black;
+}

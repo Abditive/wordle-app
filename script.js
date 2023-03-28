@@ -54,6 +54,8 @@ const words = [
   "zebra",
   "zesty",
   "moose",
+  "loose",
+  "geese",
 ];
 let singleString = "";
 const gameContainer = document.getElementById("game-container");
@@ -64,10 +66,11 @@ let inputRow3 = document.getElementsByClassName("row-3");
 let inputRow4 = document.getElementsByClassName("row-4");
 let inputRow5 = document.getElementsByClassName("row-5");
 let inputRow6 = document.getElementsByClassName("row-6");
-let winningWord = "moose";
+let stringArray = [];
+let winningWord = ["m", "o", "o", "s", "e"];
+let winningWordString = "moose";
 let testFocus = false;
 let wordFound = false;
-let testButton = document.getElementById("test-button");
 // this event will trigger the game to run the checking functions
 let progressVar = 0;
 gameContainer.addEventListener("keypress", function (event) {
@@ -100,15 +103,20 @@ function validateAnswer(currentRow, nextRow) {
 function checkAnswer(rowArray) {
   for (let input of rowArray) {
     singleString = singleString + input.value;
+    stringArray.push(input.value);
   }
+  console.log(stringArray);
   for (let val of words) {
     if (val === singleString) {
       testFocus = true;
       console.log("valid word");
       wordFound = true;
-      if (singleString === winningWord) {
+      if (singleString === winningWordString) {
         console.log("you win");
-        sharedChars(singleString, winningWord, rowArray);
+        sharedCharsArray(stringArray, winningWord, rowArray);
+        for (let val of rowArray) {
+          val.style["background-color"] = "green";
+        }
         wordFound = false;
         //Disable played row
         disableRow(rowArray);
@@ -125,43 +133,39 @@ function checkAnswer(rowArray) {
   }
 
   if (wordFound) {
-    sharedChars(singleString, winningWord, rowArray);
+    sharedCharsArray(stringArray, winningWord, rowArray);
   } else {
     console.log("this word is not on the word list");
     testFocus = false;
   }
-  console.log(singleString);
   // resets the value of singleString and wordFound each time event occurs.
   wordFound = false;
   singleString = "";
+  stringArray = [];
 }
-//  sharedChars function compares two strings and returns the position shared characters - nicked from the internet and modified to suit
-function sharedChars(currentAnswerString, correctAnswerString, activeRow) {
-  for (let i = 0; i < currentAnswerString.length; i++) {
-    let letter = currentAnswerString[i];
-    let correctIndex = correctAnswerString.indexOf(letter);
-    let currentIndex = currentAnswerString.indexOf(letter);
-    let secondCurrentIndex = currentAnswerString.indexOf(letter + 1);
-    if (correctIndex !== -1) {
-      console.log(letter);
-      if (correctIndex === currentIndex) {
-        console.log(
-          `Winning Word index is ${correctIndex} and INPUT index is ${currentIndex} - same`
-        );
-        activeRow[currentIndex].style["background-color"] = "green";
-        activeRow[currentIndex].style.color = "white";
-      } else {
-        console.log(
-          `Winning Word index is ${correctIndex} and INPUT index is ${currentIndex} - different`
-        );
-        activeRow[currentIndex].style["background-color"] = "blue";
-        activeRow[currentIndex].style.color = "white";
-      }
-      if (secondCurrentIndex !== -1) {
-        console.log("second letter is " + secondCurrentIndex);
+
+function sharedCharsArray(answerStringArray, winStringArray, activeRow) {
+  let copyWinStringArray = [...winStringArray];
+  let copyAnStringArray = [...answerStringArray];
+
+  for (let i = 0; i < 5; i++) {
+    if (copyAnStringArray[i] === copyWinStringArray[i]) {
+      console.log("hi");
+      activeRow[i].classList.add("index-match");
+      copyAnStringArray[i] = "";
+      copyWinStringArray[i] = "";
+    }
+  }
+
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+      if (copyAnStringArray[i] === copyWinStringArray[j]) {
+        if (copyAnStringArray[i] !== "") {
+          activeRow[i].classList.add("letter-match");
+          copyWinStringArray[j] = "";
+        }
       }
     }
-    console.log("second letter is " + secondCurrentIndex);
   }
 }
 
@@ -196,13 +200,4 @@ function enableRow(rows) {
   for (let input of rows) {
     input.disabled = false;
   }
-}
-function findCharacterIndices(str, char) {
-  const indices = [];
-  let index = str.indexOf(char);
-  while (index !== -1) {
-    indices.push(index);
-    index = str.indexOf(char, index + 1);
-  }
-  return indices;
 }
