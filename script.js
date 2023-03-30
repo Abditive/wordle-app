@@ -126,7 +126,7 @@ function checkAnswer(rowArray) {
         //Disable played row
         disableRow(rowArray);
         progressVar += 1;
-        console.log(progressVar);
+
         break;
       }
     }
@@ -150,7 +150,6 @@ function sharedCharsArray(answerStringArray, winStringArray, activeRow) {
 
   for (let i = 0; i < 5; i++) {
     if (copyAnStringArray[i] === copyWinStringArray[i]) {
-      console.log("hi");
       activeRow[i].classList.add("index-match");
       copyAnStringArray[i] = "";
       copyWinStringArray[i] = "";
@@ -168,7 +167,6 @@ function sharedCharsArray(answerStringArray, winStringArray, activeRow) {
     }
   }
 }
-
 // handles deleting characters and autofocus on next input field if a character is inputed
 function handleInputFocus(rowArray) {
   {
