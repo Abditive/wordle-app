@@ -6,7 +6,7 @@ This is a simple Wordle clone game built with HTML, CSS, and JavaScript.
 
 ## Getting Started
 
-To play the game, simply open the `index.html` file in your browser. You can also play the game online by visiting the [GitHub Pages site](https://yourusername.github.io/wordle-clone/) for this project.
+To play the game, simply download all files to the same folder and open the `index.html` file in your browser. You can also play the game online by visiting the [GitHub Pages site](https://abditive.github.io/wordle-app/) for this project.
 
 ## How to Play
 
