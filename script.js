@@ -69,7 +69,7 @@ const giveUpButton = document.getElementById("give-up");
 const alertContainer = document.getElementById("alerts");
 resetGame.addEventListener("click", newGame);
 giveUpButton.addEventListener("click", giveUp);
-
+//test
 // dynamic creation of the game board
 for (let i = 0; i < numberOfElements + 1; i++) {
   let row = document.createElement("input");
