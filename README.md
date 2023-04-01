@@ -14,14 +14,18 @@ The goal of the game is to guess the secret five-letter word within six attempts
 
 ## Features
 
-- Randomly generated secret five-letter word
 - Feedback on each guess.
   - Yellow represents a letter that is present in the word but at a different location.
   - Green represents a letter that is present in the word and at the same location.
 - Responsive design
+
+## FUTURE Features
+
+- Randomly generated secret five-letter word
 - On-screen keyboard (currently commented out)
 - Timer to make the game more challenging (coming soon)
 - Spanish language support (coming soon)
+- Implementation of separate file with full word list
 
 This is a JavaScript code that creates a word game where the player has to guess a five-letter word from a list of given words. The game is played on a grid with six rows, each consisting of five input fields where the player can input one letter at a time. The player has to guess the letters of the word in the correct order, and for each row, the player is given feedback on how many letters they have guessed correctly.
 

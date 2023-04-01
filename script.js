@@ -93,8 +93,8 @@ disableRow(inputRow6);
 let inputRowsAll = document.body.getElementsByClassName("test-input"); //creation of game board ends here
 
 let stringArray = [];
-let winningWord = ["m", "o", "o", "s", "e"];
-let winningWordString = "moose";
+let winningWord = ["m", "o", "o", "s", "e"]; // future update to randomly generate the word everytime the game is restarted or page is refreshsed
+let winningWordString = "moose"; // future update to randomly generate the word everytime the game is restarted or page is refreshsed
 let testFocus = false;
 let wordFound = false;
 // this event will trigger the game to run the checking functions
@@ -139,17 +139,23 @@ function validateAnswer(currentRow, nextRow) {
 }
 function checkAnswer(rowArray) {
   for (let input of rowArray) {
-    singleString = singleString + input.value;
-    stringArray.push(input.value);
+    singleString = singleString + input.value.toLowerCase();
+    stringArray.push(input.value.toLowerCase());
   }
-  console.log(stringArray);
+
   for (let val of words) {
     if (val === singleString) {
       testFocus = true;
       wordFound = true;
       if (singleString === winningWordString) {
-        console.log("you win");
         sharedCharsArray(stringArray, winningWord, rowArray);
+
+        alertContainer.style.height = "30px";
+        alertContainer.style["margin-bottom"] = "30px";
+        giveUpGame.style.visibility = "visible";
+        giveUpGame.textContent = `YOU WIN!`;
+        giveUpGame.style.width = "fit-content";
+        giveUpGame.style.height = "30px";
         for (let val of rowArray) {
           val.style["background-color"] = "#459943";
           warning.style.display = "none";
@@ -171,12 +177,13 @@ function checkAnswer(rowArray) {
   if (wordFound) {
     sharedCharsArray(stringArray, winningWord, rowArray);
   } else {
-    alertContainer.style.height = "fit-content";
+    alertContainer.style.height = "30px";
+    alertContainer.style["margin-bottom"] = "40px";
     warning.style.transition =
       "background-color 0.5s linear, height 0.3s linear";
     warning.style.visibility = "visible";
     warning.style["background-color"] = "#3c556d";
-    warning.style.height = "24px";
+    warning.style.height = "30px";
     warning.style.width = "fit-content";
     warning.textContent = "WORD NOT IN LIST";
     testFocus = false;
@@ -263,11 +270,13 @@ function giveUp() {
     "Are you sure you want to know the answer?"
   );
   if (giveUpOption) {
+    alertContainer.style.height = "100px";
+    alertContainer.style["margin-bottom"] = "30px";
     giveUpGame.style.visibility = "visible";
     giveUpGame.textContent = `ANSWER: ${winningWordString.toUpperCase()}`;
     giveUpGame.style.width = "fit-content";
-    giveUpGame.style.height = "60px";
-
+    giveUpGame.style.height = "30px";
+    warning.style.visibility = "hidden";
     for (let val of gameRows) {
       val.disabled = true;
     }

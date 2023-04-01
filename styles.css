@@ -50,9 +50,10 @@ header {
   color: white;
 }
 .test-input:focus {
-  background-color: #f4eae6;
-  color: white;
+  background-color: white;
+  color: black;
 }
+
 .index-match {
   background-color: #459943;
   color: white;
